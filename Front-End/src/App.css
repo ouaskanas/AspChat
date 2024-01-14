@@ -1,0 +1,29 @@
+body {
+  background-color: #282c34;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+h2{
+  color: aqua;
+
+}
+
+
+.form-container {
+  max-width: 500px;
+  margin-top: 100px;
+  margin-left: 350px;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+h2 {
+  margin-top: 20px;
+  /* Ajustez la valeur selon vos préférences pour définir l'espacement du haut */
+}
+
+
