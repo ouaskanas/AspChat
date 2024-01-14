@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "ChatRoom";
+}
+
+<h1>Chat Room</h1>
+
+<div>
+    <input type="text" id="username" placeholder="Your username" />
+    <button onclick="joinChat()">Join Chat</button>
+</div>
+
+<div id="chat">
+    <input type="text" id="message" placeholder="Type your message" />
+    <button onclick="sendMessage()">Send</button>
+    <ul id="messages"></ul>
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.10/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
+
+        connection.on("ReceiveMessage", (user, message) => {
+            $("#messages").append(`<li><strong>${user}:</strong> ${message}</li>`);
+        });
+
+        connection.on("UserJoined", (user) => {
+            $("#messages").append(`<li><em>${user} joined the chat.</em></li>`);
+        });
+
+        async function joinChat() {
+            const username = $("#username").val();
+            await connection.invoke("JoinChat", username);
+        }
+
+        async function sendMessage() {
+            const user = $("#username").val();
+            const message = $("#message").val();
+            await connection.invoke("SendMessage", user, message);
+        }
+
+        connection.start().then(() => {
+            console.log('Connection started');
+        }).catch(error => {
+            console.error('Error starting connection:', error);
+        });
+    </script>
+}
